@@ -3,6 +3,8 @@ require 'aspec/cli'
 require 'aspec/formatters/terminal'
 require 'aspec/formatters/junit'
 require 'aspec/runner'
+require 'aspec/parser'
+require 'aspec/test'
 
 module Aspec
   def self.configuration
@@ -14,8 +16,10 @@ module Aspec
   end
 
   class Configure
-    def initialize
-    end
+    attr_accessor :verbose, :slow, :formatter
+
+    def verbose?; verbose; end
+    def slow?; slow; end
 
     def app_under_test(&block)
       @app_under_test = block

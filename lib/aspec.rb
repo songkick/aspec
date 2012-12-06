@@ -1,6 +1,10 @@
 
+require 'aspec/cli'
+require 'aspec/formatters/terminal'
+require 'aspec/formatters/junit'
+require 'aspec/runner'
 
-class Aspec
+module Aspec
   def self.configuration
     @configuration ||= Configure.new
   end

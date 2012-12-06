@@ -1,3 +1,5 @@
+require 'rubygems'
+
 require 'rack/test'
 require 'rspec/mocks/standalone'
 require 'term/ansicolor'

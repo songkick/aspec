@@ -5,13 +5,9 @@ module Aspec
 
     attr_reader :config, :source
 
-    def initialize(config, path)
+    def initialize(config, paths)
+      @paths = paths
       @config = config
-      @source = File.read(path)
-    end
-
-    def parser
-      @parser ||= Parser.new(source)
     end
 
     def verbose?
@@ -27,7 +23,14 @@ module Aspec
     end
 
     def tests
-      parser.tests
+      @tests ||= begin
+        result = []
+        @paths.each do |path|
+          parser = Parser.new(File.read(path))
+          result += parser.tests
+        end
+        result.flatten
+      end
     end
 
     def before_each

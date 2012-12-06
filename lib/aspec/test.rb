@@ -7,22 +7,6 @@ module Aspec
       @steps = steps
     end
 
-    def verbose?
-      Aspec.configuration.verbose?
-    end
-
-    def slow?
-      Aspec.configuration.slow?
-    end
-
-    def formatter
-      Aspec.configuration.formatter
-    end
-
-    def app
-      Aspec.configuration.get_app_under_test.call
-    end
-
     def validate_method(method)
       raise "unknown method #{method}" unless %W(GET POST DELETE PUT).include?(method)
     end
@@ -35,11 +19,18 @@ module Aspec
       @steps.first[:line_num] <= line_num and @steps.last[:line_num] >= line_num
     end
 
-    def run
+    def app
+      @app.call
+    end
+
+    def run(config)
+      formatter  = config.formatter
+      is_slow    = config.slow?
+      @app        = config.get_app_under_test
       start_time = Time.at(0)
       failed = false
       @steps.each_with_index do |step, time_delta|
-        if slow?
+        if is_slow
           sleep 0.5
         end
 

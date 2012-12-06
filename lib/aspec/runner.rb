@@ -1,26 +1,27 @@
 
 module Aspec
   class TestRunner
+    attr_reader :config, :source
 
-    def initialize(path, options = {})
+    def initialize(config, path)
+      @config = config
       @source = File.read(path)
-      @options = options
     end
 
     def parser
-      @parser ||= Parser.new(@source)
+      @parser ||= Parser.new(source)
     end
 
     def verbose?
-      Aspec.configuration.verbose?
+      config.verbose?
     end
 
     def slow?
-      Aspec.configuration.slow?
+      config.slow?
     end
 
     def formatter
-      Aspec.configuration.formatter
+      config.formatter
     end
 
     def tests
@@ -28,7 +29,7 @@ module Aspec
     end
 
     def before_each
-      if before_block = Aspec.configuration.get_before
+      if before_block = config.get_before
         before_block.call
       end
     end
@@ -43,7 +44,7 @@ module Aspec
       end
       run_tests.each do |test|
         before_each
-        if test.run
+        if test.run(config)
           successes += 1 unless test.comment_only?
           puts if verbose?
         else
@@ -53,7 +54,7 @@ module Aspec
         formatter.clear
       end
       formatter.dump_summary "#{successes} passed, #{failures} failed.".send(failures > 0 ? :red : :green)
-      if after_suite_block = Aspec.configuration.get_after_suite
+      if after_suite_block = config.get_after_suite
         after_suite_block.call
       end
       if failures > 0

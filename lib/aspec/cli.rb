@@ -16,9 +16,7 @@ module Aspec
     end
 
     def run
-      TestRunner.new(@file, :verbose => @verbose,
-                            :slow => @slow,
-                            :formatter => @formatter).run(@lines)
+      TestRunner.new(Aspec.configuration, @file).run(@lines)
     end
   end
 end

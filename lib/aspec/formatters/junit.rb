@@ -2,7 +2,7 @@
 module Aspec
   module Formatter
     class JUnit
-      def initialize(test_file_name, verbose = false, out_file_name = '.junit_api_spec_runner_specs')
+      def initialize(test_file_name, verbose = false, out_file_name = '.junit_aspecs')
         @test_results = { :failures => [], :successes => [] }
         @out = File.open(out_file_name, 'w')
         @test_file_name = test_file_name
@@ -11,6 +11,7 @@ module Aspec
           unless @out.closed?
             @out.flush
             @out.close
+            puts "Output junit results to .junit_aspecs"
           end
         end
       end

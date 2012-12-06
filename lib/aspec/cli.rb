@@ -1,15 +1,17 @@
 
 module Aspec
   class CLI
-    attr_reader :args
+    attr_reader :args, :working_dir
 
-    def initialize(args)
+    def initialize(working_dir, args)
+      @working_dir = working_dir
       @args = args
     end
 
     def aspec_files
       files = []
       @args.each do |arg|
+        arg = File.expand_path(arg, working_dir)
         if File.exist?(arg)
           if File.directory?(arg)
             files += Dir[arg + "**/*.aspec"]

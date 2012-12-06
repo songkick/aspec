@@ -1,0 +1,3 @@
+GET /                   200
+GET /asdflkasjdf        200
+POST /artists?name=ASF  204

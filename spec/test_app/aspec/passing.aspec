@@ -1,0 +1,8 @@
+# passing spec
+   GET /                                 200
+
+# multiple verbs
+  POST /artists?name=Desaparecidos       204
+   GET /artists                          200    application/json    ["Desaparecidos"]
+DELETE /artists/Desaparecidos            204
+   GET /artists                          200    application/json    []

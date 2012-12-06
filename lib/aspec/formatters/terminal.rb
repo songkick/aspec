@@ -2,6 +2,8 @@
 module Aspec
   module Formatter
     class Terminal
+      include Term::ANSIColor
+
       def initialize(verbose, out = STDOUT)
         @out = out
         @verbose = verbose
@@ -25,12 +27,12 @@ module Aspec
       end
 
       def step_error(step)
-        line(step_line(step).red)
+        line(red + step_line(step) + reset)
         print_error unless @verbose
       end
 
       def step_pass(step)
-        line(step_line(step).green)
+        line(green + step_line(step) + reset)
       end
 
       def debug(step)
@@ -44,7 +46,7 @@ module Aspec
       private
 
       def step_line(step)
-        bits = [step[:method].rjust(7, " "), step[:url].ljust(50, " "), step[:exp_status], (step[:exp_content_type]||"").ljust(20, " ")]
+        bits = [step[:method].rjust(7, " "), step[:url].ljust(50, " "), step[:exp_status], (step[:exp_content_type]||"")]
         if step[:exp_content_type] == "application/json"
           begin
             json_string = JSON.parse(step[:exp_response]).to_json

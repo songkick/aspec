@@ -1,3 +1,7 @@
+require 'rack/test'
+require 'rspec/mocks/standalone'
+require 'term/ansicolor'
+require 'json'
 
 require 'aspec/cli'
 require 'aspec/formatters/terminal'

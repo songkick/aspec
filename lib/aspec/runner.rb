@@ -1,6 +1,8 @@
 
 module Aspec
   class TestRunner
+    include Term::ANSIColor
+
     attr_reader :config, :source
 
     def initialize(config, path)
@@ -42,6 +44,7 @@ module Aspec
       else
         run_tests = tests
       end
+
       run_tests.each do |test|
         before_each
         if test.run(config)
@@ -53,7 +56,9 @@ module Aspec
         end
         formatter.clear
       end
-      formatter.dump_summary "#{successes} passed, #{failures} failed.".send(failures > 0 ? :red : :green)
+      color = send(failures > 0 ? :red : :green)
+      formatter.dump_summary color + "#{successes} passed, #{failures} failed." + reset
+
       if after_suite_block = config.get_after_suite
         after_suite_block.call
       end

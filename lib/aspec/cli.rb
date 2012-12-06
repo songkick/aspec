@@ -8,10 +8,11 @@ module Aspec
       load File.expand_path(aspec_dir + "/aspec_helper.rb")
       @file = bits[0]
       @lines = bits[1..-1].map(&:to_i)
+      is_verbose = args.include?("-v")
       Aspec.configure do |c|
-        c.verbose   = args.include?("-v")
+        c.verbose   = is_verbose
         c.slow      = args.include?("--slow")
-        c.formatter = args.include?("--junit") ? Formatter::JUnit.new(@file) : Formatter::Terminal.new(@verbose)
+        c.formatter = args.include?("--junit") ? Formatter::JUnit.new(@file) : Formatter::Terminal.new(is_verbose)
       end
     end
 

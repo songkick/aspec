@@ -20,13 +20,13 @@ module Aspec
     end
 
     def app
-      @app.call
+      @app
     end
 
     def run(config)
       formatter  = config.formatter
       is_slow    = config.slow?
-      @app        = config.get_app_under_test
+      @app       = config.get_app_under_test.call
       start_time = Time.at(0)
       failed = false
       @steps.each_with_index do |step, time_delta|
@@ -37,6 +37,7 @@ module Aspec
         if ARGV.include?("--debug")
           formatter.debug(step)
         end
+
         if failed
           formatter.step_error_title(step)
           next
@@ -46,6 +47,7 @@ module Aspec
           formatter.comment(step[:comment])
         else
           Time.stub!(:now).and_return(start_time + 2*time_delta)
+
           begin
             if step[:method][0] == ">"
               method = step[:method][1..-1]
@@ -66,30 +68,33 @@ module Aspec
             end
             failed = true
           end
+
           unless failed or step[:method][0] == ">"
             if last_response.status.to_s != step[:exp_status]
-              formatter.exception("Expected status #{step[:exp_status]} got #{last_response.status}")
+              formatter.exception(" * Expected status #{step[:exp_status]} got #{last_response.status}")
               failed = true
             end
+
             if step[:exp_content_type] == "application/json" && !step[:resp_is_regex]
               begin
                 expected_object = JSON.parse(step[:exp_response])
-
                 begin
                   response_object = JSON.parse(last_response.body)
                   if expected_object != response_object
-                    formatter.exception("Expected response #{JSON.pretty_generate(expected_object)} got #{JSON.pretty_generate(response_object)}")
+                    formatter.exception(" * Expected response #{JSON.pretty_generate(expected_object)} got #{JSON.pretty_generate(response_object)}")
                     failed = true
                   end
                 rescue JSON::ParserError
-                  formatter.exception("Response did not parse correctly as JSON: #{last_response.body.inspect}")
+                  formatter.exception(" * Response did not parse correctly as JSON: #{last_response.body.inspect}")
                   failed = true
                 end
               rescue JSON::ParserError
-                formatter.exception("Expectation did not parse correctly as JSON: #{step[:exp_response].inspect}")
+                formatter.exception(" * Expectation did not parse correctly as JSON: #{step[:exp_response].inspect}")
                 failed = true
               end
+
             else
+
               if step[:resp_is_regex]
                 pattern = nil, body = nil
                 if !(step[:exp_content_type].start_with? 'text/')
@@ -100,19 +105,20 @@ module Aspec
                   body = last_response.body.to_s
                 end
                 if !(body =~ pattern)
-                  formatter.exception("Expected response pattern #{step[:exp_response].inspect} didn't match #{last_response.body.inspect}")
+                  formatter.exception(" * Expected response pattern #{step[:exp_response].inspect} didn't match #{last_response.body.inspect}")
                   failed = true
                 end
               elsif !step[:resp_is_regex] & (last_response.body.to_s != step[:exp_response])
-                formatter.exception("Expected response #{step[:exp_response].inspect} got #{last_response.body.inspect}")
+                formatter.exception(" * Expected response #{step[:exp_response].inspect} got #{last_response.body.inspect[0..50] + "..."}")
                 failed = true
               end
             end
+
             if step[:exp_content_type]
               exp_content_type_header = "#{step[:exp_content_type]}"
               exp_content_type_header << ";charset=utf-8" unless exp_content_type_header.start_with? "image/"
               if last_response.headers["Content-Type"] != exp_content_type_header
-                formatter.exception("Expected content type #{exp_content_type_header} got #{last_response.headers["Content-Type"]}")
+                formatter.exception(" * Expected content type #{exp_content_type_header} got #{last_response.headers["Content-Type"]}")
                 failed = true
               end
             end

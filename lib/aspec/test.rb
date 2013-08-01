@@ -27,8 +27,10 @@ module Aspec
       formatter  = config.formatter
       is_slow    = config.slow?
       @app       = config.get_app_under_test.call
-      start_time = Time.at(0)
+      #Time.at(0) causes our token to never expire
+      start_time = Time.now
       failed = false
+
       @steps.each_with_index do |step, time_delta|
         if is_slow
           sleep 0.5
@@ -51,6 +53,7 @@ module Aspec
           begin
             if step[:method][0] == ">"
               method = step[:method][1..-1]
+
               validate_method(method)
               url = "http://" + step[:url]
               FakeWeb.register_uri(method.downcase.to_sym, url,
@@ -59,6 +62,7 @@ module Aspec
                 )
             else
               validate_method(step[:method])
+              header "AUTHORIZATION", "Bearer #{config.auth_token}"
               send(step[:method].downcase, step[:url])
             end
           rescue Object => e
@@ -117,7 +121,7 @@ module Aspec
             if step[:exp_content_type]
               exp_content_type_header = "#{step[:exp_content_type]}"
               exp_content_type_header << ";charset=utf-8" unless exp_content_type_header.start_with? "image/"
-              if last_response.headers["Content-Type"] != exp_content_type_header
+              if last_response.headers["Content-Type"].gsub(/\s+/, "") != exp_content_type_header
                 formatter.exception(" * Expected content type #{exp_content_type_header} got #{last_response.headers["Content-Type"]}")
                 failed = true
               end

@@ -22,7 +22,7 @@ module Aspec
   end
 
   class Configure
-    attr_accessor :verbose, :slow, :formatter
+    attr_accessor :verbose, :slow, :formatter, :auth_token
 
     def verbose?; verbose; end
     def slow?; slow; end

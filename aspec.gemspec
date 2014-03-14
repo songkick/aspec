@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "aspec"
-  s.version           = "0.1"
+  s.version           = "0.1.1"
   s.summary           = "Testing for API external surfaces"
   s.author            = "Daniel Lucraft"
   s.email             = "dan@songkick.com"
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.files = %w[README.md] +
             Dir.glob("{bin,lib,spec}/**/*.rb")
-  
+
   s.add_dependency "rspec"
   s.add_dependency "term-ansicolor"
   s.add_dependency "rack-test"

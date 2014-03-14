@@ -1,2 +1,3 @@
-gem "rspec"
-gem "term-ansicolor"
+source "https://rubygems.org"
+
+gemspec

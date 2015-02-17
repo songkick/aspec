@@ -1,10 +1,11 @@
+require 'pathname'
 
 module Aspec
   class CLI
     attr_reader :args, :working_dir
 
     def initialize(working_dir, args)
-      @working_dir = working_dir
+      @working_dir = Pathname.new(working_dir)
       @args = args
     end
 
@@ -24,7 +25,7 @@ module Aspec
     end
 
     def aspec_helper_path
-      File.expand_path("aspec/aspec_helper.rb")
+      working_dir.join("aspec/aspec_helper.rb")
     end
 
     def run

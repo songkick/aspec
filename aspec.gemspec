@@ -20,5 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "term-ansicolor"
   s.add_dependency "rack-test"
   s.add_dependency "json-compare"
+
+  s.add_development_dependency "sinatra"
 end
 

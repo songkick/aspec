@@ -13,4 +13,16 @@ describe Aspec::CLI do
 
     expect(cli.aspec_files.sort).to eq expected_results
   end
+
+  it "should fail for failing specs" do
+    cli = Aspec::CLI.new(test_app_dir, ["aspec/failing.aspec"])
+
+    expect(cli.run).to eq 1
+  end
+
+  it "should pass for passing specs" do
+    cli = Aspec::CLI.new(test_app_dir, ["aspec/passing.aspec"])
+
+    expect(cli.run).to eq 0
+  end
 end

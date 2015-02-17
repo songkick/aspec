@@ -7,7 +7,7 @@ class TestApp < Sinatra::Application
 
   get "/artists" do
     status 200
-    content_type :json
+    content_type 'application/json;charset=utf-8'
     @@artists.to_json
   end
 

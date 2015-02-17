@@ -2,6 +2,7 @@
 module Aspec
   class Test
     include Rack::Test::Methods
+    include RSpec::Mocks::ExampleMethods
 
     def initialize(steps)
       @steps = steps

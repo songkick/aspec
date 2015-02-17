@@ -46,7 +46,7 @@ module Aspec
         if step[:comment]
           formatter.comment(step[:comment])
         else
-          Time.stub(:now).and_return(start_time + 2*time_delta)
+          allow(Time).to receive(:now).and_return(start_time + 2*time_delta)
 
           begin
             if step[:method][0] == ">"

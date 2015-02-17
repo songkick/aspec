@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = %w[README.md] +
             Dir.glob("{bin,lib,spec}/**/*.rb")
 
-  s.add_dependency "rspec", ">= 2.11.0"
+  s.add_dependency "rspec", ">= 2.14.1"
   s.add_dependency "term-ansicolor"
   s.add_dependency "rack-test"
   s.add_dependency "json-compare"

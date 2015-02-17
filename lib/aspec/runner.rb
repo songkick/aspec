@@ -65,11 +65,8 @@ module Aspec
       if after_suite_block = config.get_after_suite
         after_suite_block.call
       end
-      if failures > 0
-        exit(1)
-      else
-        exit(0)
-      end
+
+      failures
     end
   end
 end

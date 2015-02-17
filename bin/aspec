@@ -3,12 +3,5 @@
 $:.push(File.expand_path("../../lib", __FILE__))
 require 'aspec'
 
-Aspec::CLI.new(Dir.pwd, ARGV).run
-
-
-
-
-
-
-
-
+failure_count = Aspec::CLI.new(Dir.pwd, ARGV).run
+exit(failure_count)

@@ -82,6 +82,7 @@ module Aspec
                   response_object = JSON.parse(last_response.body)
                   if expected_object != response_object
                     formatter.exception(" * Expected response #{JSON.pretty_generate(expected_object)} got #{JSON.pretty_generate(response_object)}")
+                    formatter.exception(" * Diff #{JSON.pretty_generate(JsonCompare.get_diff(expected_object, response_object))}")
                     failed = true
                   end
                 rescue JSON::ParserError

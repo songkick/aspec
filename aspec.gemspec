@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "aspec"
-  s.version           = "0.3.0"
+  s.version           = "0.4.0"
   s.summary           = "Testing for API external surfaces"
   s.author            = "Daniel Lucraft"
   s.email             = "dan@songkick.com"

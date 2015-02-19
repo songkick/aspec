@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency "json-compare"
 
   s.add_development_dependency "sinatra"
+  s.add_development_dependency "rake"
 end
 
